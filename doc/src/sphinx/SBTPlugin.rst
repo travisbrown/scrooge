@@ -66,14 +66,18 @@ most likely to want to edit:
 Migrating from 3.x.x to 3.18.0
 ------------------------------
 
-Sbt 0.13.5 and above
+SBT 0.13.5 and above
 ~~~~~~~~~~~~~~~~~~~~
 
-Autoplugins are available only for sbt 0.13.5 and above.
-
+The Scrooge SBT plugin now uses SBT's `auto plugin system
+<http://www.scala-sbt.org/0.13/docs/Plugins.html>`_, which is only available
+for SBT 0.13.5 and later.
 
 Projects using  `build.sbt`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+For 3.17.0 and earlier releases of the plugin, it was necessary to add the
+settings to your build configuration explicitly:
 
 ::
 
@@ -85,7 +89,7 @@ Projects using  `build.sbt`
         // more settings here
       )
 
-It now should look like
+This is no longer necessary, so the build above should look like this:
 
 ::
 
@@ -95,9 +99,11 @@ It now should look like
       )
 
 
-Settings are included automatically, by virtue of the autoplugin mechanism for all JvmPlugin projects.
+The default settings are included automatically, by virtue of the auto plugin
+mechanism.
 
-If you use a setting, this is in scope automatically as well so
+The plugin's setting and task keys are also now brought into scope
+automatically, so the following:
 
 ::
 
@@ -111,7 +117,7 @@ If you use a setting, this is in scope automatically as well so
         }
       )
 
-becomes
+becomes simply:
 
 ::
 
@@ -126,7 +132,9 @@ becomes
 Using `Build.scala`
 ~~~~~~~~~~~~~~~~~~~
 
-The big change here, as well as not needing to inject settings, is that the location of the keys has changed. They are now under an object called autoImport.
+The big change here, in addition to the automatically injected settings, is
+that the location of the keys has changed. They are now under an object called
+`autoImport`. So this:
 
 ::
 
@@ -146,7 +154,7 @@ The big change here, as well as not needing to inject settings, is that the loca
       )
     }
 
-becomes
+becomes:
 
 ::
 
