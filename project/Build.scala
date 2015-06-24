@@ -9,6 +9,7 @@ import pl.project13.scala.sbt.JmhPlugin
 import sbtassembly.Plugin._
 import AssemblyKeys._
 import sbtbuildinfo.Plugin._
+import scoverage.ScoverageSbtPlugin
 
 object Scrooge extends Build {
   val branch = Process("git" :: "rev-parse" :: "--abbrev-ref" :: "HEAD" :: Nil).!!.trim
@@ -68,6 +69,13 @@ object Scrooge extends Build {
 
     resolvers ++= Seq(
       "sonatype-public" at "https://oss.sonatype.org/content/groups/public"
+    ),
+
+    ScoverageSbtPlugin.ScoverageKeys.coverageHighlighting := (
+      CrossVersion.partialVersion(scalaVersion.value) match {
+        case Some((2, 10)) => false
+        case _ => true
+      }
     ),
 
     publishM2Configuration <<= (packagedArtifacts, checksums in publish, ivyLoggingLevel) map { (arts, cs, level) =>
@@ -175,6 +183,7 @@ object Scrooge extends Build {
       "com.github.scopt" %% "scopt" % "3.2.0",
       "com.novocode" % "junit-interface" % "0.8" % "test->default" exclude("org.mockito", "mockito-all"),
       "org.codehaus.plexus" % "plexus-utils" % "1.5.4",
+      "org.slf4j" % "slf4j-log4j12" % "1.6.6" % "test", // used in thrift transports
       "com.google.code.findbugs" % "jsr305" % "1.3.9",
       "commons-cli" % "commons-cli" % "1.2",
       finagle("core") exclude("org.mockito", "mockito-all"),
